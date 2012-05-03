@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<title>Stopwatch demo</title>
+<style>
+	body { font:bold 450px/1.3em monospace; text-align:center; letter-spacing:-0.15em; }
+	#start { display:block; position:fixed; left:0; bottom:0; width:10px; height:10px; background:#DDD; }
+</style>
+</head>
+<body>
+	<div id="clock"></div>
+	<a id="start" onclick="stopwatch.start(new Date(0));"></a>
+	
+	<script src="../lib/stopwatch.js"></script>
+	<script>
+		//var stopwatch = new Stopwatch(document.getElementById('clock'));
+		var stopwatch = new Stopwatch(document.getElementById('clock'), Stopwatch.DOWN, 0, 3);
+		stopwatch.reset();
+	</script>
+</body>
