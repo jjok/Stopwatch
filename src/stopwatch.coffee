@@ -1,10 +1,12 @@
+"use strict"
+
 #
 # Stopwatch
-# Jonathan Jefferies (jjok)
+# @author Jonathan Jefferies (jjok)
 #
-
 class @Stopwatch
-	#Directions
+
+	# Directions
 	@UP = 0
 	@DOWN = 1
 
@@ -12,20 +14,28 @@ class @Stopwatch
 	interval = null
 	self = null
 
-	#The stopwatch time
+	# The stopwatch time
 	time = null
 
-	#The time the stopwatch starts at / resets to
+	# The time the stopwatch starts at / resets to.
 	start_time = null
 
+	# The time for the stopwatch to stop at.
 	stop_time = null
 
-	#The DOM element to draw the time to
+	# The DOM element to draw the time to.
 	el = null
 
-	#The direction the stopwatch counts in
+	# The direction the stopwatch counts in.
 	dir = null
 
+	#
+	# Constructor
+	# @param element
+	# @param {int} direction
+	# @param {int} minutes
+	# @param {int} seconds
+	#
 	constructor: (element = null, direction, minutes = 0, seconds = 0) ->
 		el = element
 		start_time = new Date 0
@@ -34,46 +44,66 @@ class @Stopwatch
 		dir = direction
 		self = @
 
-	#Set the timer back to the start time
-	reset: () ->
+	#
+	# Set the timer back to the start time
+	# @visibility public
+	#
+	reset: ->
 		time = start_time
 		draw() if el isnt null
-	
+
+	#
+	# Start the stopwatch
+	# @visibility public
+	# @param {Date} stopTime 
+	#
 	start: (stopTime) ->
 		stop_time ?= stopTime
 		previous_time = new Date()
-		console.log @
 		interval = setInterval update, 100
 
-	stop: () ->
-		#console.log 'stop'
+	#	
+	# Stop the stopwatch
+	# @visibility public
+	# 
+	stop: ->
 		clearInterval interval
 
-	update = () ->
+	#
+	# Update the clock
+	# @visibility private
+	#
+	update = ->
 		current_time = new Date()
 		diff = current_time.getTime() - previous_time.getTime()
 
+		# Down
 		if dir is Stopwatch.DOWN
 			milli = time.getTime() - diff
 
-			if milli <= stop_time.getMilliseconds()
-				#@stop()
+			if stop_time? and milli <= stop_time.getMilliseconds()
 				self.stop()
 			else
 				time.setTime milli
-			#stop() if stop_time isnt null and time.getTime() <= stop_time.getTime()
+		# Up
 		else
-			time.setTime time.getTime() + diff
-		
+			milli = time.getTime() + diff
+			
+			if stop_time? and milli >= stop_time.getMilliseconds()
+				self.stop()
+			else
+				time.setTime milli
 
-		#time.setTime new_time
 		draw() if el isnt null
 		previous_time = current_time
-		
-	draw = () ->
+
+	#
+	# Draw the current time to the screen, if required
+	# @visibility private
+	# 
+	draw = ->
 		min = time.getMinutes()
 		min = "0" + min if min < 10 
 		sec = time.getSeconds()
 		sec = "0" + sec if sec < 10 
 		el.innerHTML = min + ':' + sec
-		
