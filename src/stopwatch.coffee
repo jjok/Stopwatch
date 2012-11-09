@@ -103,7 +103,7 @@ class @Stopwatch
 	# 
 	draw = ->
 		min = time.getMinutes()
-		min = "0" + min if min < 10 
+		min = "0" + min if min < 10
 		sec = time.getSeconds()
-		sec = "0" + sec if sec < 10 
+		sec = "0" + sec if sec < 10
 		el.innerHTML = min + ':' + sec
